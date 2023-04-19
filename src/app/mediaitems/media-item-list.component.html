@@ -1,0 +1,54 @@
+<!-- <section> -->
+
+
+        <!-- <h1>Categories: {{mediaItems | categorylist}} </h1> -->
+        <section>
+            <header>
+                <a routerLink="add">
+                    <img src="assets/01.png" class="icon" title="this will be displayed as a tooltip">
+                </a>
+            </header>
+        </section>
+         <!-- <label>
+            <ng-template ngFor let-medium [ngForOf]="lookupLists.mediums">
+                <input (click)="onMediumClick(medium)" name="medium" type="radio" [value]="medium" ng-model="medium">
+                <label>{{medium}}</label>
+            </ng-template>   
+            <input (click)="onMediumClick('')" name="medium" type="radio" value="All">
+            <label>All</label>             
+          </label>  -->
+          <!-- <nav>
+                <a (click)="getMediaItems('Series')">
+                    <img src="assets/02.png" class="icon">
+                </a>
+                <a (click)="getMediaItems('Movies')">
+                    <img src="assets/03.png" class="icon">
+                </a>
+                <a (click)="getMediaItems('')">
+                    <img src="assets/04.png" class="icon">
+                </a>
+          </nav> -->
+
+    
+    <!-- <div class="container"> -->
+    <div class = "horizontal">
+        <!-- <ng-template ngFor let-mediaItem1 [ngForOf]="mediaItems"> -->
+        <ng-container *ngFor="let mediaItem1 Of mediaItems">
+                <!-- *ngFor="let mediaItem1 of mediaItems" -->
+            <mw-media-item 
+                                [mediaItem]="mediaItem1" 
+                                (delete)="onMediaItemListDelete(mediaItem1)"
+                                [ngClass]="{'medium-movies': mediaItem1.medium === 'Movies','medium-series': mediaItem1.medium === 'Series'}"
+            ></mw-media-item>
+        </ng-container>
+        <!-- </ng-template> -->
+    </div>
+    <!-- <br> -->
+    <!-- </div> -->
+<!-- </section> -->
+<!-- *ngIf="mediaItems.length > 0" -->
+<section >
+        <a routerLink="add">
+            <img src="assets/01.png" class="icon" title="this will be displayed as a tooltip">
+        </a>
+</section>
