@@ -1,8 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnInit, Inject } from "@angular/core";
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
-import { mediaItemService, MediaItem } from "../media-item-service";
+//import { mediaItemService } from "../media-item-service";
 import { lookupListToken } from "../providers";
 import { Router } from "@angular/router";
+import { MediaItemServiceProxy, MediaItemDtoPagedResultDto, MediaItemDto} from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector:'mw-media-item-form',
@@ -12,7 +13,7 @@ import { Router } from "@angular/router";
 export class MediaItemFormComponent implements OnInit  {
     form!: FormGroup;
 
-    constructor (private mediaItemService1: mediaItemService,
+    constructor (private mediaItemService1: MediaItemServiceProxy,
                 @Inject(lookupListToken) public lookupLists:any,
                 private router: Router,
                 private _formBuilder: FormBuilder){}
@@ -52,7 +53,7 @@ export class MediaItemFormComponent implements OnInit  {
         //     );
        // this.form.addControl("name",undefined,undefined);
     }
-    @Input()  mediaItem : MediaItem;
+    @Input()  mediaItem : MediaItemDto;
     @Output() delete = new EventEmitter(); 
  
     /*
@@ -67,10 +68,22 @@ export class MediaItemFormComponent implements OnInit  {
         }else return {nonNullable : true,}
     }
     */
-    onsubmit(mediaItem1:any): void {
+    onsubmit(mediaItem1:MediaItemDto): void {
         
-        console.log('this is Media Item Submit log');
-        this.mediaItemService1.add(mediaItem1)
+    console.log('this is Media Item Submit log');
+
+    this.mediaItemService1.create(mediaItem1).subscribe(
+      () => {
+        // this.notify.info(this.l('SavedSuccessfully'));
+        // this.bsModalRef.hide();
+        // this.onSave.emit();
+      },
+      () => {
+       // this.saving = false;
+      }
+    );
+
+    //    this.mediaItemService1.add(mediaItem1)
         //  .subscribe(()=>{
         this.router.navigate(['app/mediaitems/',mediaItem1.medium]) // this.mediaItem.medium
         //  });

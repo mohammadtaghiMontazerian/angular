@@ -34,7 +34,6 @@
     <div class = "horizontal">
         <!-- <ng-template ngFor let-mediaItem1 [ngForOf]="mediaItems"> -->
         <ng-container *ngFor="let mediaItem1 Of mediaItems">
-                <!-- *ngFor="let mediaItem1 of mediaItems" -->
             <mw-media-item 
                                 [mediaItem]="mediaItem1" 
                                 (delete)="onMediaItemListDelete(mediaItem1)"

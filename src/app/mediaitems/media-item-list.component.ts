@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Output, OnInit, Inject } from "@angular/core";
-import { mediaItemService } from "./media-item-service";
+//import { mediaItemService } from "./media-item-service";
 import { lookupListToken } from "./providers";
 import { ActivatedRoute } from "@angular/router";
+import { MediaItemServiceProxy, MediaItemDtoPagedResultDto, MediaItemDto} from '@shared/service-proxies/service-proxies';
+import { finalize } from "rxjs";
 
 @Component({
     selector: 'mw-media-item-list',
@@ -9,12 +11,12 @@ import { ActivatedRoute } from "@angular/router";
     styleUrls: ['./media-item-list.component.css'],
 })
 export class MediaItemListComponent implements OnInit {
-    mediaItems: any
+    mediaItems: MediaItemDto[]
     searchMedium: any = ''
 
-    constructor(private mediaItemService1: mediaItemService,
+    constructor(private mediaItemService1: MediaItemServiceProxy,
         @Inject(lookupListToken) public lookupLists:any,
-        private mediaItemService: mediaItemService,
+        //private mediaItemService: mediaItemService,
         private activatedRoute: ActivatedRoute){}
 
     ngOnInit(): void {
@@ -31,15 +33,30 @@ export class MediaItemListComponent implements OnInit {
     }
     @Output() delete = new EventEmitter();
 
-    getMediaItems(medium: any){
-        console.log('getMediaItems called');
-        console.log(medium);
-        this.searchMedium = medium;
-        // this.mediaItems = 
-        return this.mediaItemService.get(medium)
-        // .subscribe(mediaItems => 
-        //         {this.mediaItems = mediaItems});
-    }
+     getMediaItems(medium: any): MediaItemDto[]{
+    //     console.log('getMediaItems called');
+    //     console.log(medium);
+    //     this.searchMedium = medium;
+    //      this.mediaItems = 
+    //      this.mediaItemService1.getAll('',0,1000) //medium
+    //      .subscribe((mediaItems: any) => 
+    //              {this.mediaItems = mediaItems});
+    //     return this.mediaItems;
+            this.mediaItemService1
+            .getAll(
+                '',0,1000
+            )
+            .pipe(
+            finalize(() => {
+                finishedCallback();
+            })
+            )
+            .subscribe((result: MediaItemDtoPagedResultDto) => {
+            this.mediaItems = result.items;
+            //this.showPaging(result, pageNumber);
+            });
+               return this.mediaItems;
+        }
     onMediumClick(medium:any){
         console.log('medium changed'+ medium);
         this.getMediaItems(medium)
@@ -56,10 +73,14 @@ export class MediaItemListComponent implements OnInit {
             this.firstMediaItem.watchedOn = true;
             */
         console.log(mediaItem.name)
-        this.mediaItemService.delete(mediaItem)
+        this.mediaItemService1.delete(mediaItem)
         //.subscribe(()=>{this.getMediaItems(this.searchMedium)});
         console.log('this is Media Item List delete log');
       
     };
    
+}
+
+function finishedCallback() {
+    throw new Error("Function not implemented.");
 }

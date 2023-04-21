@@ -1,76 +1,95 @@
 import { Injectable } from "@angular/core";
-//import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-//import { map, catchError, Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { map, catchError, Observable, finalize } from 'rxjs';
 import { throwError } from "rxjs";
 import { MediaItemComponent } from "./media-item.component";
-
+import { MediaItemServiceProxy, MediaItemDtoPagedResultDto, MediaItemDto} from '@shared/service-proxies/service-proxies';
 @Injectable({
     providedIn: "root",
 })
 export class mediaItemService {
-     mediaItems //: MediaItemComponent[]
-     = [
-         {
-             id: 1,
-             name: "Firebug",
-             medium: "Series",
-             category: "Science Fiction",
-             year: 2010,
-             watchedOn: 1294166565384,
-             isFavorite: false
-           },
-           {
-             id: 2,
-             name: "The Small Tall",
-             medium: "Movies",
-             category: "Comedy",
-             year: 2015,
-             watchedOn: null,
-             isFavorite: true
-           }, {
-             id: 3,
-             name: "The Redemption",
-             medium: "Movies",
-             category: "Action",
-             year: 2016,
-             watchedOn: null,
-             isFavorite: false
-           }, {
-             id: 4,
-             name: "Hoopers",
-             medium: "Series",
-             category: "Drama",
-             year: null,
-             watchedOn: null,
-             isFavorite: true
-           }, {
-             id: 5,
-             name: "Happy Joe: Cheery Road",
-             medium: "Movies",
-             category: "Action",
-             year: 2015,
-             watchedOn: 1457166565384,
-             isFavorite: false
-           }
-     ]
-//    constructor(private http: HttpClient) {}
+     mediaItems : MediaItemDto[]
+    //  = [
+    //      {
+    //          id: 1,
+    //          name: "Firebug",
+    //          medium: "Series",
+    //          category: "Science Fiction",
+    //          year: 2010,
+    //          watchedOn: 1294166565384,
+    //          isFavorite: false
+    //        },
+    //        {
+    //          id: 2,
+    //          name: "The Small Tall",
+    //          medium: "Movies",
+    //          category: "Comedy",
+    //          year: 2015,
+    //          watchedOn: null,
+    //          isFavorite: true
+    //        }, {
+    //          id: 3,
+    //          name: "The Redemption",
+    //          medium: "Movies",
+    //          category: "Action",
+    //          year: 2016,
+    //          watchedOn: null,
+    //          isFavorite: false
+    //        }, {
+    //          id: 4,
+    //          name: "Hoopers",
+    //          medium: "Series",
+    //          category: "Drama",
+    //          year: null,
+    //          watchedOn: null,
+    //          isFavorite: true
+    //        }, {
+    //          id: 5,
+    //          name: "Happy Joe: Cheery Road",
+    //          medium: "Movies",
+    //          category: "Action",
+    //          year: 2015,
+    //          watchedOn: 1457166565384,
+    //          isFavorite: false
+    //        }
+    //  ]
+    constructor(private http: HttpClient,
+               //injector: Injector,
+               private _mediaitemService: MediaItemServiceProxy) {}
 
     get(medium: undefined){
-        // const getOptions = {
-        //     params: {medium : medium}
-        // };
+         const getOptions = {
+             params: {medium : medium}
+         }
         //,getOptions
-        // return this.http.get<MediaItemResponse>('mediaitems',getOptions)//mediaItems;
-        // .pipe(map(response => {return response.mediaItems;})
-        // , catchError(this.handleError))
-        let mediaItems;
-            if (medium) {
-              mediaItems = this.mediaItems.filter(i => i.medium === medium);
-            } else {
-              mediaItems = this.mediaItems;
-            }
-        console.log('media itam servcie get');
-       return mediaItems;
+        this._mediaitemService.getAll('',0,1000)
+      //.getAll(
+        // request.keyword,
+        // request.isActive,
+        // request.skipCount,
+        // request.maxResultCount
+      //)
+      .pipe(
+        finalize(() => {
+          finishedCallback();
+        })
+      )
+      .subscribe((result: MediaItemDtoPagedResultDto) => {
+        this.mediaItems = result.items;
+       // this.showPaging(result, pageNumber);
+      });
+      return this.mediaItems;
+        //  return this.http.get<MediaItemDtoPagedResultDto>('MediaItem')//mediaItems;
+        //  .pipe(map(response => {return response.items;}) //.mediaItems
+        //  , catchError(this.handleError))
+      //   let mediaItems;
+      //       if (medium) {
+      //         mediaItems = this.mediaItems.filter(i => i.medium === medium);
+      //       } else {
+      //         mediaItems = this.mediaItems;
+      //       }
+      //   console.log('media itam servcie get');
+      //  return mediaItems;
     }
     
     private handleError(error: any) {
@@ -101,19 +120,27 @@ export class mediaItemService {
     }
 
 }
-export interface MediaItem {
-    id: number;
-    name: string;
-    medium: string;
-    category: string;
-    year: number;
-    watchedOn: number;
-    isFavourite: boolean;
-}
-interface MediaItemResponse {
-    mediaItems: MediaItem[];
-}
+// export interface MediaItem {
+//     id: number;
+//     name: string;
+//     medium: string;
+//     category: string;
+//     year: number;
+//     watchedOn: number;
+//     isFavourite: boolean;
+// }
+// interface MediaItemResponse {
+//     mediaItems: MediaItem[];
+// }
+// export interface MediaItem extends MediaItemDto {
+
+// }
+
 function get(medium: any, undefined: undefined) {
     throw new Error("Function not implemented.");
+}
+
+function finishedCallback() {
+  throw new Error("Function not implemented.");
 }
 
