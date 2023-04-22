@@ -3106,6 +3106,9 @@ export class MediaItemDto implements IMediaItemDto {
     name: string | undefined;
     medium: string | undefined;
     category: string | undefined;
+    year: number;
+    watchedOn: number;
+    isFavourite: boolean;
 
     constructor(data?: IMediaItemDto) {
         if (data) {
@@ -3129,6 +3132,9 @@ export class MediaItemDto implements IMediaItemDto {
             this.name = _data["name"];
             this.medium = _data["medium"];
             this.category = _data["category"];
+            this.year = _data["year"];
+            this.watchedOn = _data["watchedOn"];
+            this.isFavourite = _data["isFavourite"];
         }
     }
 
@@ -3152,6 +3158,9 @@ export class MediaItemDto implements IMediaItemDto {
         data["name"] = this.name;
         data["medium"] = this.medium;
         data["category"] = this.category;
+        data["year"] = this.year;
+        data["watchedOn"] = this.watchedOn;
+        data["isFavourite"] = this.isFavourite;
         return data;
     }
 
@@ -3175,6 +3184,9 @@ export interface IMediaItemDto {
     name: string | undefined;
     medium: string | undefined;
     category: string | undefined;
+    year: number;
+    watchedOn: number;
+    isFavourite: boolean;
 }
 
 export class MediaItemDtoPagedResultDto implements IMediaItemDtoPagedResultDto {

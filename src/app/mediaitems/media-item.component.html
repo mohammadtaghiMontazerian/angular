@@ -2,13 +2,12 @@
     <h1>{{mediaItem.name}}</h1>
     <!-- |uppercase|slice: mediaItem.id: 5 -->
     <!-- <ng-template [ngIf]="mediaItem.watchedOn">  -->
-    <div class="mb-0 my-2">{{mediaItem.medium}} </div>
-    <div class="mb-0 my-2"> {{mediaItem.category}} </div>
-    <div class="mb-0 my-2"> {{mediaItem.year}} </div>
-    <div class="mb-0 my-2"> {{mediaItem.name}}</div>
-    <!-- <h3>{{mediaItem.watchedDate | date: 'dd-MM-yyyy':'UTC' }}</h3> -->
+    <div class="mb-0 my-2">Medium: {{mediaItem.medium}} </div>
+    <div class="mb-0 my-2">Category: {{mediaItem.category}} </div>
+    <div class="mb-0 my-2">Year: {{mediaItem.year}} </div>
+    <div class="mb-0 my-2">WatchedOn: {{mediaItem.watchedOn===0 ? 'N/A' : mediaItem.watchedOn  | date: 'dd-MM-yyyy':'UTC' }}</div>
     <!-- <app-power-boost-calculator></app-power-boost-calculator> -->
-    <p class="mb-0 my-2">Media Item description</p>
+    <!-- <p class="mb-0 my-2">Media Item description</p> -->
     <!-- </ng-template> -->
 </div>
 <section>
@@ -16,7 +15,7 @@
         <tr>
             <td>
                 <!-- [mwFavourite]="!mediaItem.isFavorite" -->
-                <svg class="is-favourite1-hovering" *ngIf="!mediaItem.isFavorite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="22" height="22" viewBox="0 0 1000 1000" xml:space="preserve">
+                <svg class="is-favourite1-hovering" *ngIf="!mediaItem.isFavourite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="22" height="22" viewBox="0 0 1000 1000" xml:space="preserve">
                     <!-- <svg [mwFavourite]="!mediaItem.isFavorite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="10" height="10" viewBox="0 0 1000 1000" xml:space="preserve"> -->
                 <desc>Created with Fabric.js 3.5.0</desc>
                 <defs>
@@ -27,7 +26,7 @@
                 </g>
                 </svg>
                     <!--  -->
-                    <svg class="is-favourite1-hovering" *ngIf="mediaItem.isFavorite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="22" height="22" viewBox="0 0 1000 1000" xml:space="preserve">
+                    <svg class="is-favourite1-hovering" *ngIf="mediaItem.isFavourite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="22" height="22" viewBox="0 0 1000 1000" xml:space="preserve">
                         <!-- <svg [mwFavourite]="mediaItem.isFavorite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="10" height="10" viewBox="0 0 1000 1000" xml:space="preserve"> -->
                     <desc>Created with Fabric.js 3.5.0</desc>
                     <defs>

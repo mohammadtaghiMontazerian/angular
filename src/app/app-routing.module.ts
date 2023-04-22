@@ -27,10 +27,12 @@ import { MediaItemFormComponent } from './mediaitems/new-item/media-item-form.co
                     { path: 'about', component: AboutComponent, canActivate: [AppRouteGuard] },
                     { path: 'update-password', component: ChangePasswordComponent, canActivate: [AppRouteGuard] },
                     { path: 'mediaitems/:medium', component: MediaItemListComponent},
-                    { path: 'mediaitems/Series', component: MediaItemListComponent},                
                     { path: 'mediaitems/all', redirectTo: 'mediaitems/all', pathMatch: 'full'},
+//                    { path: 'mediaitems/add', component: MediaItemFormComponent},
+//                    { path: 'mediaitems/:medium/add', redirectTo: 'mediaitems/add', pathMatch: 'full'},
                     { path: 'mediaitems/:medium/add', component: MediaItemFormComponent},
-                    // {path: 'mediaitems/add'
+
+// {path: 'mediaitems/add'
                     // , loadChildren: () => import('./mediaitems/new-item/new-item.module').then(m=>m.NewItemModule)}, 
                     ]
              }

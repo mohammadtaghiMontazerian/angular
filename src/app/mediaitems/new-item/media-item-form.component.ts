@@ -1,22 +1,27 @@
-import { Component, Input, Output, EventEmitter, OnInit, Inject } from "@angular/core";
+import { Component, Input, Output, EventEmitter, OnInit, Inject, Injector } from "@angular/core";
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
 //import { mediaItemService } from "../media-item-service";
 import { lookupListToken } from "../providers";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { MediaItemServiceProxy, MediaItemDtoPagedResultDto, MediaItemDto} from '@shared/service-proxies/service-proxies';
+import { AppComponentBase } from "@shared/app-component-base";
 
 @Component({
     selector:'mw-media-item-form',
     templateUrl:'./media-item-form.component.html',
     styleUrls:['./media-item-form.component.css']
 })
-export class MediaItemFormComponent implements OnInit  {
+export class MediaItemFormComponent extends AppComponentBase implements OnInit  {
     form!: FormGroup;
 
-    constructor (private mediaItemService1: MediaItemServiceProxy,
+    constructor ( injector : Injector,
+                private mediaItemService1: MediaItemServiceProxy,
                 @Inject(lookupListToken) public lookupLists:any,
                 private router: Router,
-                private _formBuilder: FormBuilder){}
+                private _formBuilder: FormBuilder,
+                private route: ActivatedRoute){
+        super(injector);
+    }
 
     yearValidator(control: FormControl): { year: { min: number; max: number; }; }{
         if (control.value.trim().length === 0)
@@ -40,7 +45,11 @@ export class MediaItemFormComponent implements OnInit  {
             name : this._formBuilder.control('',[Validators.pattern('[\\w\\-\\s\\/]+'),
                                         Validators.required]),
             category: this._formBuilder.control('',Validators.required),
-            year: this._formBuilder.control('2023')} //,this.yearValidator1)
+            year: this._formBuilder.control('2023'),
+            isFavourite: this._formBuilder.control('true'),
+            watchedOn: this._formBuilder.control(''),
+        
+        } //,this.yearValidator1)
            // ,undefined,undefined
             );
         // this.form= new FormGroup({
@@ -54,7 +63,9 @@ export class MediaItemFormComponent implements OnInit  {
        // this.form.addControl("name",undefined,undefined);
     }
     @Input()  mediaItem : MediaItemDto;
-    @Output() delete = new EventEmitter(); 
+    @Output() delete = new EventEmitter();
+//    @Output() cancel = new EventEmitter(); 
+//    @Output() check1 = new EventEmitter(); 
  
     /*
     yearValidator1 (control: FormControl): { nonNullable: true; }| null{
@@ -68,24 +79,34 @@ export class MediaItemFormComponent implements OnInit  {
         }else return {nonNullable : true,}
     }
     */
+    onCheckBoxClick (event:any) {
+        console.log('this is Media Item onCheckBoxClick log');
+        console.log(event.target.checked);
+        if (event.checked == event.target.value)
+            event.checked = false
+        
+        console.log(event.target.checked);
+
+    }
     onsubmit(mediaItem1:MediaItemDto): void {
         
     console.log('this is Media Item Submit log');
-
+    console.log (mediaItem1.isFavourite)
     this.mediaItemService1.create(mediaItem1).subscribe(
       () => {
-        // this.notify.info(this.l('SavedSuccessfully'));
-        // this.bsModalRef.hide();
-        // this.onSave.emit();
+         this.notify.info(this.l('SavedSuccessfully'));
+        //  this.bsModalRef.hide();
+        //  this.onSave.emit();
       },
       () => {
-       // this.saving = false;
+        // this.saving = false;
       }
     );
 
     //    this.mediaItemService1.add(mediaItem1)
         //  .subscribe(()=>{
-        this.router.navigate(['app/mediaitems/',mediaItem1.medium]) // this.mediaItem.medium
+        this.router.navigate(['app/mediaitems/',mediaItem1.medium]) // // this.mediaItem.medium
+                            // mediaitems/:medium/add
         //  });
     
     };
@@ -96,4 +117,11 @@ export class MediaItemFormComponent implements OnInit  {
         this.delete.emit(mediaItem1);//this.mediaItem
     
     };
+    onCancelEdit() {
+        console.log('this is Media Item form onCancelEdit log');
+        this.router.navigate([".."],      {relativeTo: this.route}); 
+        //this.router.navigate(['']) //app/mediaitems/all
+    }
 }; 
+
+

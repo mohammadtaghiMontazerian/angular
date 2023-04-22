@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-
+import { MediaItemDto } from "@shared/service-proxies/service-proxies";
 @Component({
     selector:'mw-media-item',
     templateUrl:'./media-item.component.html',
@@ -8,7 +8,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 export class MediaItemComponent{
    // id! : number;
 
-    @Input()  mediaItem : any;
+    @Input()  mediaItem : MediaItemDto;
     @Output() delete = new EventEmitter(); 
      
     onDelete(mediaItem1:any): void {

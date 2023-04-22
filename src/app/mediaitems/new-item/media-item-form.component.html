@@ -1,10 +1,16 @@
-<header>
-    <h2>Add Media to Watch</h2>
-</header>
+<section>
+    <header>
+        <a routerLink="..">
+            <img width="64" height="64" src="assets/back.jpg" class="icon" (click)="onCancelEdit()">
+        </a>
+        <h2>Add Media to Watch</h2>
+    </header>
+</section>
 <form [formGroup]="form" (ngSubmit)="onsubmit(form.value)">
+    <!-- (ngSubmit)="onsubmit(form.value)" -->
     <ul>
         <li> 
-            <label for="medium">Medium</label>
+            <label for="medium">Medium:</label>
             <select style="width: 160;" name="medium" id="medium" formControlName="medium">
                 <!-- <option value="Movie" >Movie</option> -->
                 <!-- <option value="Serie" >Serie</option> -->
@@ -12,14 +18,14 @@
             </select>
         </li>
         <li> 
-            <label for="name">Name</label>
+            <label for="name">Name:</label>
             <input type="text" name="name" id="name" maxlength="40" formControlName="name">
             <div *ngIf="form.get('name').hasError('pattern')" class="error">
                 Name has invalid characters.
             </div>
         </li>
         <li> 
-            <label for="category">Category</label>
+            <label for="category">Category:</label>
             <select name="category" id="category" formControlName="category">
                 <option *ngFor="let category of lookupLists.categories" [value]="category" id="category">{{category}}</option>
                 <!-- <option  value="Science Fiction" id="Science Fiction">Science Fiction</option> -->
@@ -30,7 +36,7 @@
             </select>
         </li>
         <li> 
-            <label for="year">Year</label>
+            <label for="year">Year:</label>
             <input type="text" name="year" id="year" maxlength="4" formControlName="year">
             <div *ngIf="form.get('year').errors as yearErrors" class="error"> 
                 <!-- hasError('year') -->
@@ -38,6 +44,16 @@
                 <!-- {{yearErrors1.[year].min1}} and {{yearErrors.[year].max1}}. -->
             </div>
         </li>
+ <li>        
+            <label for="isFavourite">Is Favourite:</label> 
+            <input type="checkbox" (click)="onCheckBoxClick($event)" id="isFavourite" name="isFavourite" formControlName="isFavourite">
+        </li>
+        <li> 
+            <label for="watchedOn">WatchedOn:</label>
+            <input type="text" name="watchedOn" id="watchedOn" maxlength="20" formControlName="watchedOn">
+        </li> 
+<!-- this.form.get('check').valueChanges
+.subscribe((check)=> this.changeEvent()) -->
     </ul>
     <button type="submit" [disabled]="!form.valid">Save</button>
 </form>

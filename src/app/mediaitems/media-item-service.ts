@@ -4,9 +4,9 @@ import { map, catchError, Observable, finalize } from 'rxjs';
 import { throwError } from "rxjs";
 import { MediaItemComponent } from "./media-item.component";
 import { MediaItemServiceProxy, MediaItemDtoPagedResultDto, MediaItemDto} from '@shared/service-proxies/service-proxies';
-@Injectable({
-    providedIn: "root",
-})
+// @Injectable({
+//     providedIn: "root",
+// })
 export class mediaItemService {
      mediaItems : MediaItemDto[]
     //  = [
