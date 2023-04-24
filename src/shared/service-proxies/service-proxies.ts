@@ -217,6 +217,62 @@ export class MediaItemServiceProxy {
     }
 
     /**
+     * @param medium (optional) 
+     * @return Success
+     */
+    getAllMedium(medium: string | undefined): Observable<MediaItemDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/MediaItem/GetAllMedium?";
+        if (medium === null)
+            throw new Error("The parameter 'medium' cannot be null.");
+        else if (medium !== undefined)
+            url_ += "Medium=" + encodeURIComponent("" + medium) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllMedium(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllMedium(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<MediaItemDtoPagedResultDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<MediaItemDtoPagedResultDto>;
+        }));
+    }
+
+    protected processGetAllMedium(response: HttpResponseBase): Observable<MediaItemDtoPagedResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MediaItemDtoPagedResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param id (optional) 
      * @return Success
      */
@@ -273,25 +329,15 @@ export class MediaItemServiceProxy {
     }
 
     /**
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
+     * @param medium (optional) 
      * @return Success
      */
-    getAll(sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<MediaItemDtoPagedResultDto> {
+    getAll(medium: string | undefined): Observable<MediaItemDtoPagedResultDto> {
         let url_ = this.baseUrl + "/api/services/app/MediaItem/GetAll?";
-        if (sorting === null)
-            throw new Error("The parameter 'sorting' cannot be null.");
-        else if (sorting !== undefined)
-            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&";
-        if (skipCount === null)
-            throw new Error("The parameter 'skipCount' cannot be null.");
-        else if (skipCount !== undefined)
-            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
-        if (maxResultCount === null)
-            throw new Error("The parameter 'maxResultCount' cannot be null.");
-        else if (maxResultCount !== undefined)
-            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        if (medium === null)
+            throw new Error("The parameter 'medium' cannot be null.");
+        else if (medium !== undefined)
+            url_ += "Medium=" + encodeURIComponent("" + medium) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -3096,13 +3142,6 @@ export interface IIsTenantAvailableOutput {
 
 export class MediaItemDto implements IMediaItemDto {
     id: number;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
     name: string | undefined;
     medium: string | undefined;
     category: string | undefined;
@@ -3122,13 +3161,6 @@ export class MediaItemDto implements IMediaItemDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
-            this.creatorUserId = _data["creatorUserId"];
-            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
-            this.lastModifierUserId = _data["lastModifierUserId"];
-            this.isDeleted = _data["isDeleted"];
-            this.deleterUserId = _data["deleterUserId"];
-            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
             this.name = _data["name"];
             this.medium = _data["medium"];
             this.category = _data["category"];
@@ -3148,13 +3180,6 @@ export class MediaItemDto implements IMediaItemDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        data["creatorUserId"] = this.creatorUserId;
-        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
-        data["lastModifierUserId"] = this.lastModifierUserId;
-        data["isDeleted"] = this.isDeleted;
-        data["deleterUserId"] = this.deleterUserId;
-        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
         data["name"] = this.name;
         data["medium"] = this.medium;
         data["category"] = this.category;
@@ -3174,13 +3199,6 @@ export class MediaItemDto implements IMediaItemDto {
 
 export interface IMediaItemDto {
     id: number;
-    creationTime: moment.Moment;
-    creatorUserId: number | undefined;
-    lastModificationTime: moment.Moment | undefined;
-    lastModifierUserId: number | undefined;
-    isDeleted: boolean;
-    deleterUserId: number | undefined;
-    deletionTime: moment.Moment | undefined;
     name: string | undefined;
     medium: string | undefined;
     category: string | undefined;

@@ -7,7 +7,7 @@
      {path: 'add'
      , loadChildren: () => import('./new-item/new-item.module').then(m=>m.NewItemModule)
      },
- //     {path: 'add', component: MediaItemFormComponent},
+     //     {path: 'add', component: MediaItemFormComponent},
 //      {path: ':medium', component: MediaItemListComponent},
     //   {path: 'Movies', component: MediaItemListComponent},
     //   {path: 'Series', component: MediaItemListComponent},

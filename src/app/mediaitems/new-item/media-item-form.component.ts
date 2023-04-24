@@ -47,7 +47,7 @@ export class MediaItemFormComponent extends AppComponentBase implements OnInit  
             category: this._formBuilder.control('',Validators.required),
             year: this._formBuilder.control('2023'),
             isFavourite: this._formBuilder.control('true'),
-            watchedOn: this._formBuilder.control(''),
+            watchedOn: this._formBuilder.control('',[Validators.required]),
         
         } //,this.yearValidator1)
            // ,undefined,undefined

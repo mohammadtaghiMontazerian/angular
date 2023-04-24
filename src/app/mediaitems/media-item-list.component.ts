@@ -56,7 +56,7 @@ implements OnInit {
                                 let medium = paramMap.get('medium');
                                 if (medium.toLowerCase()==='all')
                                     medium = ''
-                                    this.mediaItems = this.getMediaItems(medium)
+                                this.mediaItems = this.getMediaItems(medium)
                                 });
     }
    // @Output() delete = new EventEmitter();
@@ -72,7 +72,7 @@ implements OnInit {
     //     return this.mediaItems;
             this.mediaItemService1
             .getAll(
-                '',0,1000
+                medium
             )
             .pipe(
             finalize(() => {
@@ -113,7 +113,15 @@ implements OnInit {
               if (result) {
                 this.mediaItemService1.delete(mediaItem.id).subscribe(() => {
                   abp.notify.success(this.l('SuccessfullyDeleted'));
-                  this.refresh();
+                  //this.refresh();
+                  
+                  this.activatedRoute.paramMap
+                .subscribe(paramMap => { 
+                                // let medium = paramMap.get('medium');
+                                // if (medium.toLowerCase()==='all')
+                                //     medium = ''
+                                this.mediaItems = this.getMediaItems('')
+                                });
                 });
               }
             }
@@ -132,7 +140,7 @@ implements OnInit {
     
         this.mediaItemService1
         .getAll(
-            '',0,1000
+            'all'
         )
         .pipe(
         finalize(() => {
